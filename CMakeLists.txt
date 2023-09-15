@@ -16,23 +16,37 @@ set(COMMON_SOURCES
 	)
 	
 if (CMAKE_HOST_WIN32)
-	set(OS_ABOUT_SOURCES src/SerialPortInfoWinBase.cpp src/SerialPortWinBase.cpp include/CSerialPort/SerialPortInfoWinBase.h include/CSerialPort/SerialPortWinBase.h )
+	set(OS_ABOUT_SOURCES src/SerialPortInfoWinBase.cpp src/SerialPortWinBase.cpp
+						 include/CSerialPort/SerialPortInfoWinBase.h
+						 include/CSerialPort/SerialPortWinBase.h 
+						 )
 elseif (CMAKE_HOST_UNIX)
-	set(OS_ABOUT_SOURCES src/SerialPortInfoUnixBase.cpp src/SerialPortUnixBase.cpp include/CSerialPort/SerialPortInfoUnixBase.h include/CSerialPort/SerialPortUnixBase.h )
+	set(OS_ABOUT_SOURCES src/SerialPortInfoUnixBase.cpp src/SerialPortUnixBase.cpp
+						 include/CSerialPort/SerialPortInfoUnixBase.h
+						 include/CSerialPort/SerialPortUnixBase.h 
+						 )
 endif ()
 
+set(LIBS )
 if (WIN32)
 	# for function availableFriendlyPorts
-	set(LIBS setupapi)
+	list(APPEND LIBS setupapi)
 elseif(APPLE)
     find_library(IOKIT_LIBRARY IOKit)
     find_library(FOUNDATION_LIBRARY Foundation)
-	set(LIBS ${FOUNDATION_LIBRARY} ${IOKIT_LIBRARY})
+	list(APPEND LIBS ${FOUNDATION_LIBRARY} ${IOKIT_LIBRARY})
 elseif (UNIX)
-	set(LIBS pthread)
+	list(APPEND LIBS pthread)
 endif()
 
 set(SRCS ${COMMON_SOURCES} ${OS_ABOUT_SOURCES}
 	)
 set(INCS ${CMAKE_CURRENT_SOURCE_DIR}/include)
-__add_real_target(cserialport lib SOURCE ${SRCS} LIB ${LIBS} INC ${INCS} INTERFACE ${INCS})
+
+__add_real_target(cserialport lib SOURCE ${SRCS} LIB ${LIBS}
+							      INC ${INCS} INTERFACE ${INCS}
+								  )
+								  
+if(CC_INSTALL_CSERIALPORT)
+	__install_directory_specif(${CMAKE_CURRENT_SOURCE_DIR}/include/ cserialport)
+endif()
