@@ -1,0 +1,9 @@
+license: GLP
+author: zenggui,anoob@sina.cn
+url: xxxxxx
+repository: http://172.20.180.12:8050/yanfa4/thirdpary/cserialport
+external_repository: http://172.20.180.12:8050/CrealityOfficial/cserialport
+description: cserialport
+topics: usb,serial,port
+build_deps: 
+search_deps:
